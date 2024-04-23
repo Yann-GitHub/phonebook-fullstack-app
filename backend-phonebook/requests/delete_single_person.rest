@@ -1,0 +1,5 @@
+### Succes delete single person -- status code 204
+DELETE  http://localhost:3002/api/persons/2
+
+### Failed delete single person -- stauts code 204
+DELETE http://localhost:3002/api/persons/8

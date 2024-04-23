@@ -1,0 +1,6 @@
+### Success get single person
+Get http://localhost:3002/api/persons/2
+
+
+### Failed get single person
+Get http://localhost:3002/api/persons/9

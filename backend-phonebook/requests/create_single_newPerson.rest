@@ -1,0 +1,33 @@
+### Success create single person -- status code 200 (OK)
+Post http://localhost:3002/api/persons
+Content-Type: application/json
+
+{
+    "name": "Bobby Brown",
+    "number": "040-127776"
+}
+
+### Failed create single person/ Missing name -- status code 400 (Bad request - Invalid data)
+Post http://localhost:3002/api/persons
+Content-Type: application/json
+
+{
+    "number": "040-127776"
+}
+
+### Failed create single person/ Missing nummber -- status code 400 (Bad request - Invalid data)
+Post http://localhost:3002/api/persons
+Content-Type: application/json
+
+{
+    "name": "Dan Brown"
+}
+
+### Failed create single person/ Name already exist -- status code 400 (Bad request - Invalid data)
+Post http://localhost:3002/api/persons
+Content-Type: application/json
+
+{
+    "name": "Tobby Lebowsky",
+    "number": "040-127778"
+}
