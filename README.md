@@ -24,13 +24,6 @@ This is a simple CRUD application designed to manage contacts using the MERN sta
 
 ## Getting Started
 
-<!-- To run the application locally, follow these steps:
-
-1. Clone this repository to your local machine.
-2. Navigate to the project directory.
-3. Install dependencies by running npm install in both the frontend and backend directories.
-4. Start the frontend and backend servers by running npm run dev in the frontend and backend directories, respectively. -->
-
 ### Prerequisites
 
 - Node.js and npm: You will need Node.js and npm installed on your local machine. You can download Node.js [here](https://nodejs.org/en/download/) and npm is included in the installation. To verify that they are installed, you can run `node -v` and `npm -v`.
