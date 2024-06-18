@@ -22,10 +22,30 @@ mongoose
     console.log("Error connecting to MongoDB:", error.message);
   });
 
-////// Define a schema for the phonebook/contacts/persons
+////// Define a schema for the phonebook/contacts/persons - without mongoose validation
+// const personSchema = new mongoose.Schema({
+//   name: String,
+//   number: String,
+// });
+
+////// Define a schema for the phonebook/contacts/persons - with mongoose validation
 const personSchema = new mongoose.Schema({
-  name: String,
-  number: String,
+  name: {
+    type: String,
+    required: true,
+    minlength: 3,
+  },
+  // number: String,
+  number: {
+    type: String,
+    validate: {
+      validator: function (v) {
+        return /^\d{2,3}-\d{8}$/.test(v);
+      },
+      message: (props) => `${props.value} is not a valid phone number!`,
+    },
+    required: [true, "User phone number required"],
+  },
 });
 
 // Modify the toJSON method of the schema to format the returned object when it is serialized to JSON

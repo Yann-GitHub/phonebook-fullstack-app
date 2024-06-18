@@ -85,9 +85,9 @@ const App = () => {
             setNewNumber('')
           })
           .catch((error) => {
-            console.log(error.message)
+            console.log(error)
             setErrorMessage({
-              message: `Information of ${personObject.name} has already been removed from server`,
+              message: `Information of ${personObject.name} has already been removed from server or invalid name format (min 3 characters)`,
               type: 'error',
             })
             // setErrorMessage(`Information of ${personObject.name} has already been removed from server`)
@@ -108,17 +108,27 @@ const App = () => {
         setNewNumber('')
       }
     } else {
-      personService.create(personObject).then((returnedPerson) => {
-        setInitialPersons(initialPersons.concat(returnedPerson))
-        setNewName('')
-        setNewNumber('')
-        // alert(`${personObject.name} was succesfully added to the phonebook`)
-        // setErrorMessage(`Added ${personObject.name}`)
-        setErrorMessage({ message: `Added ${personObject.name}`, type: 'success' })
-        setTimeout(() => {
-          setErrorMessage(null)
-        }, 5000)
-      })
+      personService
+        .create(personObject)
+        .then((returnedPerson) => {
+          setInitialPersons(initialPersons.concat(returnedPerson))
+          setNewName('')
+          setNewNumber('')
+          // alert(`${personObject.name} was succesfully added to the phonebook`)
+          // setErrorMessage(`Added ${personObject.name}`)
+          setErrorMessage({ message: `Added ${personObject.name}`, type: 'success' })
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
+        })
+        .catch((error) => {
+          console.log(error)
+          setErrorMessage({ message: error.response.data.error, type: 'error' })
+          // setErrorMessage(error.response.data.error)
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
+        })
     }
   }
 

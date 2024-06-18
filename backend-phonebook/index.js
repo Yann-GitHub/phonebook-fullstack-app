@@ -57,17 +57,17 @@ const unknownEndpoint = (request, response) => {
 const errorHandler = (error, request, response, next) => {
   console.error(error.message);
 
-  switch (error.message) {
-    case "Invalid data":
-      return response.status(400).send({ error: error.message });
-    case "Name must be unique":
-      return response.status(400).send({ error: error.message });
-    default:
-      if (error.name === "CastError") {
-        return response.status(400).send({ error: "malformatted id" });
-      } else {
-        return response.status(500).send({ error: "an error occurred" });
-      }
+  if (
+    error.message === "Invalid data" ||
+    error.message === "Name must be unique"
+  ) {
+    return response.status(400).send({ error: error.message });
+  } else if (error.name === "CastError") {
+    return response.status(400).send({ error: "malformatted id" });
+  } else if (error.name === "ValidationError") {
+    return response.status(400).send({ error: error.message });
+  } else {
+    return response.status(500).send({ error: "an error occurred" });
   }
 };
 
@@ -271,18 +271,39 @@ app.post("/api/persons", (req, res, next) => {
 
 ///////////////// Define PUT methode -- status code 201 (Created)
 app.put("/api/persons/:id", (req, res, next) => {
-  const body = req.body;
+  // Viable without Mongoose validation - 1st way
+  //   const body = req.body;
+
+  //   // Check if the name or number is missing
+  //   if (!body.name || !body.number) {
+  //     return next(new Error("Invalid data"));
+  //   }
+
+  //   // Update the person
+  //   Person.findByIdAndUpdate(
+  //     req.params.id, // The ID of the person to update
+  //     { name: body.name, number: body.number }, // The new data for the person
+  //     { new: true } // Options: return the updated person
+  //   )
+  //     .then((updatedPerson) => {
+  //       res.json(updatedPerson); // Send the updated person as the response
+  //     })
+  //     .catch((error) => next(error)); // Pass any errors to the error handler
+  // });
+
+  // Viable with Mongoose validation - 2nd way
+  const { name, number } = req.body;
 
   // Check if the name or number is missing
-  if (!body.name || !body.number) {
+  if (!name || !number) {
     return next(new Error("Invalid data"));
   }
 
   // Update the person
   Person.findByIdAndUpdate(
     req.params.id, // The ID of the person to update
-    { name: body.name, number: body.number }, // The new data for the person
-    { new: true } // Options: return the updated person
+    { name, number }, // The new data for the person
+    { new: true, runValidators: true, context: "query" } // Options: return the updated person
   )
     .then((updatedPerson) => {
       res.json(updatedPerson); // Send the updated person as the response
