@@ -1,5 +1,5 @@
 require("dotenv").config();
-const mongoose = require("mongoose"); // For MongoDB Atlas connection - ODM
+// const mongoose = require("mongoose"); // For MongoDB Atlas connection - ODM
 
 console.log(
   " <<<||-------------------  Wesh papa, ton server est lancé (phonebook) !  -------------------||>>>"
@@ -29,7 +29,7 @@ console.log(
 ////////////////////////////////////////////////////////////////////////////////////////
 
 // const phonebook = require("./data.js"); // can't assign a new value to a variable declared with const !!
-let phonebook = require("./data.js"); // mock data
+// let phonebook = require("./data.js"); // mock data
 
 const express = require("express"); // Express web server framework
 let morgan = require("morgan"); // HTTP request logger middleware for node.js
@@ -54,7 +54,7 @@ const unknownEndpoint = (request, response) => {
 };
 
 // Define middleware that handle errors in a centralized way - Express error handler
-const errorHandler = (error, request, response, next) => {
+const errorHandler = (error, request, response) => {
   console.error(error.message);
 
   if (
@@ -72,7 +72,7 @@ const errorHandler = (error, request, response, next) => {
 };
 
 // Define custom token for morgan
-morgan.token("body", (req, res) => JSON.stringify(req.body));
+morgan.token("body", (req) => JSON.stringify(req.body));
 // Define a custom logging format for morgan
 const myFormat =
   ":method :url :status :res[content-length] - :response-time ms :body";
@@ -195,7 +195,7 @@ app.get("/info", (req, res, next) => {
 // Same with middleware managing the error
 app.delete("/api/persons/:id", (request, response, next) => {
   Person.findByIdAndDelete(request.params.id)
-    .then((result) => {
+    .then(() => {
       response.status(204).end();
     })
     .catch((error) => {
